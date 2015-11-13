@@ -96,9 +96,9 @@ def containers_remove(id):
     Delete a specific container - must be already stopped/killed
 
     """
-    
+    docker ('rm',id)
 
-    resp = docker ('rm',id)
+    resp = '{"id":"%s"}' % id
     return Response(response=resp, mimetype="application/json")
 
 @app.route('/containers', methods=['DELETE'])
@@ -107,6 +107,7 @@ def containers_remove_all():
     Force remove all containers - dangrous!
 
     """
+    
     docker('rm',docker('ps -a -q'))
 
     resp = '{"id":"%s"}' %id
@@ -118,13 +119,13 @@ def images_remove_all():
     Force remove all images - dangrous!
 
     """
-    docker('rmi'docker('images','-q'))
-    resp = docker ('rmi'docker('images','-q'))
+    docker ('rmi'docker('images','-q'))
+    resp = 
     return Response(response=resp, mimetype="application/json")
 
 
 @app.route('/containers', methods=['POST'])
-def containers_create(id,publish):
+def containers_create():
     """
     Create container (from existing image using id or name)
 
@@ -135,7 +136,6 @@ def containers_create(id,publish):
     """
     body = request.get_json(force=True)
     image = body['image']
-    docker('build'docker('-t',id))
     args = ('run', '-d')
     id = docker(*(args + (image,)))[0:12]
     return Response(response='{"id": "%s"}' % id, mimetype="application/json")
@@ -171,8 +171,6 @@ def containers_update(id):
         state = body['state']
         if state == 'running':
             docker('restart', id)
-	else if state =='stopped':
-	    docker('stop', id)
     except:
         pass
 
@@ -187,9 +185,7 @@ def images_update(id):
     curl -s -X PATCH -H 'Content-Type: application/json' http://localhost:8080/images/7f2619ed1768 -d '{"tag": "test:1.0"}'
 
     """
-    
-    
-    resp = docker('tag',id,'latest')
+    resp = ''
     return Response(response=resp, mimetype="application/json")
 
 
